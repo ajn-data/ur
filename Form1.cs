@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,7 +17,6 @@ namespace DigitalUr
         DispatcherTimer dt = new DispatcherTimer();
         Stopwatch sw = new Stopwatch();
         string currentTime = string.Empty;
-        private readonly object elapsedtimeitem;
 
         public Form1()
         {
@@ -33,12 +32,7 @@ namespace DigitalUr
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            lblStatus.Text = DateTime.Now.ToString("T");
-        }
-
-        private void dato(object sender, EventArgs e)
-        {
-            lblDato.Text = DateTime.Today.ToString("T");
+            lblStatus.Text = DateTime.Now.ToString();
         }
 
         public void startbtn(object sender, EventArgs e)
@@ -47,13 +41,12 @@ namespace DigitalUr
             dt.Start();
         }
 
-        private void stopbtn(object sender, EventArgs e)
+        public void stopbtn(object sender, EventArgs e)
         {
             if (sw.IsRunning)
             {
                 sw.Stop();
             }
-            elapsedtimeitem.Items.Add(currentTime);
         }
 
         void dt_Tick(object sender, EventArgs e)
@@ -72,5 +65,4 @@ namespace DigitalUr
             lblClock.Text = "00:00:00";
         }
     }
-} 
-
+}
