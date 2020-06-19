@@ -9,11 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Windows.Threading;
+using System.Timers;
+using System.Media;
 
 namespace DigitalUr
 {
     public partial class Form1 : Form
     {
+        System.Timers.Timer timerAlarm;
         DispatcherTimer dt = new DispatcherTimer();
         Stopwatch sw = new Stopwatch();
         string currentTime = string.Empty;
@@ -21,8 +24,31 @@ namespace DigitalUr
         public Form1()
         {
             InitializeComponent();
+            timerAlarm = new System.Timers.Timer();
+            timerAlarm.Interval = 1000;
+            timerAlarm.Elapsed += Timer_Elapsed;
             dt.Tick += new EventHandler(dt_Tick);
             dt.Interval = new TimeSpan(0, 0, 0, 0, 1);
+        }
+
+        public void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            DateTime currentTime = DateTime.Now;
+            DateTime userTime = dateTimePicker.Value;
+            if (currentTime.Hour == userTime.Hour && currentTime.Minute == userTime.Minute && currentTime.Second == userTime.Second)
+            {
+                timerAlarm.Stop();
+                try
+                {
+                    SoundPlayer player = new SoundPlayer();
+                    player.SoundLocation = @"C:\Users\alexa\Downloads\Alarm.wav";
+                    player.PlayLooping();
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Messege", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -64,5 +90,28 @@ namespace DigitalUr
             sw.Reset();
             lblClock.Text = "00:00:00";
         }
+
+        private void btnAddTime_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnSetTime_Click(object sender, EventArgs e)
+        {
+            timerAlarm.Start();
+            lblAlarm.Text = "Active";
+        }
+
+        public void btnCancel_Click(object sender, EventArgs e)
+        {
+            timerAlarm.Stop();
+            lblAlarm.Text = "Inactive";
+        }
+
+        private void lblAlarm_Click(object sender, EventArgs e)
+        {
+
+        }
     }
-}
+} 
+
