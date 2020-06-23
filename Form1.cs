@@ -21,6 +21,7 @@ namespace DigitalUr
         Stopwatch sw = new Stopwatch();
         string currentTime = string.Empty;
 
+        private int totalSeconds;
         public Form1()
         {
             InitializeComponent();
@@ -29,6 +30,14 @@ namespace DigitalUr
             timerAlarm.Elapsed += Timer_Elapsed;
             dt.Tick += new EventHandler(dt_Tick);
             dt.Interval = new TimeSpan(0, 0, 0, 0, 1);
+
+            for (int i = 0; i < 60; i++)
+            {
+                this.cbMinutes.Items.Add(i.ToString());
+                this.cbSeconds.Items.Add(i.ToString());
+            }
+            this.cbMinutes.SelectedIndex = 59;
+            this.cbSeconds.SelectedIndex = 59;
         }
 
         public void Timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -112,6 +121,42 @@ namespace DigitalUr
         {
 
         }
+
+        private void cdStart_Click(object sender, EventArgs e)
+        {
+            this.cdStart.Enabled = false;
+            this.cdStop.Enabled = true;
+
+            int minutes = int.Parse(this.cbMinutes.SelectedItem.ToString());
+            int seconds = int.Parse(this.cbSeconds.SelectedItem.ToString());
+
+            totalSeconds = (minutes * 60) + seconds;
+
+            this.cdTimer.Enabled = true;
+        }
+
+        private void cdStop_Click(object sender, EventArgs e)
+        {
+            this.cdStop.Enabled = false;
+            this.cdStart.Enabled = true;
+
+            totalSeconds = 0;
+            this.cdTimer.Enabled = false;
+        }
+
+        private void cdTimer_Tick(object sender, EventArgs e)
+        {
+            if (totalSeconds > 0)
+            {
+                totalSeconds--;
+                int minutes = totalSeconds / 60;
+                int seconds = totalSeconds - (minutes * 60);
+                this.cdDisplay.Text = minutes.ToString() + ":" + seconds.ToString();
+            }
+            else
+            {
+                this.cdTimer.Stop();
+            }
+        }
     }
 } 
-
